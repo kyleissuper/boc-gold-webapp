@@ -9,7 +9,11 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <style>
-      body, .top, .bottom, header, section, .group, .group * {
+      html {
+        width: 100%;
+        overflow-x: hidden;
+      }
+      html, body, .top, .bottom, header, section, .group, .group * {
         box-sizing: border-box;
       }
       @media (min-width: 550px) {
@@ -57,12 +61,27 @@
         padding: 1.5em;
         margin-bottom: 15px;
       }
-      #search_url {
+      #search_names {
         width: Calc(100% - 40px);
       }
       #search_icon {
         cursor: pointer;
         margin-top: 15px;
+      }
+      section.result {
+        min-height: 200px;
+      }
+      .thumb {
+        width: 150px;
+        height: 150px;
+        background-position: center;
+        background-size: cover;
+        border-radius: 5px;
+        float: right;
+      }
+      .name {
+        font-weight: 700;
+        font-size: 14px;
       }
     </style>
   </head>
@@ -78,8 +97,8 @@
     {% if data["type"] is none %}
       <section>
         <p class="input-field">
-            <input type="text" id="search_url" class="autocomplete" autofocus>
-            <label for="search_url">Find deals by pasting website URL</label>
+            <input type="text" id="search_names" class="autocomplete" autofocus>
+            <label for="search_names">Find deals by business name</label>
             <i class="material-icons right" id="search_icon">search</i>
         </p>
 		  	<p><strong>OR</strong></p>
@@ -92,12 +111,12 @@
       </section>
     {% elif data["results"]|length == 0 %}
       <section>
-        Sorry, we couldn't find any results for that search. Try selecting one of the pre-populated results in the search bar below?
+        Sorry, we couldn't find any results for that search. Try selecting one of the pre-populated results below.
       </section>
       <section>
         <p class="input-field">
-            <input type="text" id="search_url" class="autocomplete" autofocus>
-            <label for="search_url">Find deals by pasting website URL</label>
+            <input type="text" id="search_names" class="autocomplete" autofocus>
+            <label for="search_names">Find deals by business name</label>
             <i class="material-icons right" id="search_icon">search</i>
         </p>
 		  	<p><strong>OR</strong></p>
@@ -112,11 +131,36 @@
       <section>
         <a href="/">Click to return to search page</a>
       </section>
+      {% for result in data["results"] %}
+        <section class="result">
+          <img class="thumb" style="background-image: url('{{ result['image'] }}')" />
+          {% if result["url"] != "-" %}
+            <a href="{{ result['url'] }}" target="_blank" rel="noopener noreferrer">
+              <span class="name">{{ result["name"]|trim() }}</span></a>
+          {% else %}
+            <span class="name">
+              {{ result["name"]|trim() }}</span>
+          {% endif %}
+          <span class="address">
+            {{ result["address"] }}
+          </span>
+          <span class="phone">
+            {{ result["phone"] }}
+          </span>
+          <span class="discount">
+            {{ result["discount"] }}
+          </span>
+          <span class="description">
+            {{ result["description"] }}
+          </span>
+        </section>
+      {% endfor %}
     {% endif %}
     <section>
       <h5>What is BOC Gold?</h5>
-      <p>BOC Gold is a prototype solution that shows you Bank of China exclusive deals. Simply paste the URL of the website you are on, or find deals using your location.</p>
+      <p>BOC Gold is a prototype solution that shows you Bank of China exclusive deals. Simply search for business names, or find deals using your location.</p>
       <p>This solution was built for a <a href="https://bschool.nus.edu.sg/news-hub/press-release/news/3511">24 Hour Hackathon</a> hosted by the National University of Singapore Business School and sponsored by Bank of China (Singapore).</p>
+      <p>The data is based on old deals that were previously offered, but the web application is fully functional with respect to being able to reliably search this old set of data..</p>
     </section>
     <div class="bottom">
       &copy;
@@ -128,20 +172,20 @@
     </div>
     <script type="text/javascript">
       let submit_url;
-      document.querySelector("#search_url").addEventListener("keyup", function(event) {
+      document.querySelector("#search_names").addEventListener("keyup", function(event) {
         event.preventDefault();
         if (event.keyCode === 13) {
-          submit_url = "/?url=" + this.value;
+          submit_url = "/?search=" + this.value;
           window.location.replace(submit_url);
         }
       });
       document.querySelector("#search_icon").addEventListener("click", function(event) {
-        submit_url = "/?url=" + document.querySelector("#search_url").value;
+        submit_url = "/?search=" + document.querySelector("#search_names").value;
         window.location.replace(submit_url);
       });
       function showPosition(position) {
-        submit_url = "/?latitude=" + position.coords.latitude;
-        submit_url = submit_url + "&longitude=" + position.coords.longitude;
+        submit_url = "/?lat=" + position.coords.latitude;
+        submit_url = submit_url + "&lng=" + position.coords.longitude;
         window.location.replace(submit_url);
       }
       function getLocation() {
@@ -156,15 +200,33 @@
       });
 		  let options = {
         minLength: 0,
+				limit: 5,
         onAutocomplete: function() {
-          submit_url = "/?url=" + document.querySelector("#search_url").value;
+          submit_url = "/?search=" + document.querySelector("#search_names").value;
           window.location.replace(submit_url);
         },
         data: {
-          "Apple": null,
-          "Microsoft": null,
-          "Google": 'https://placehold.it/250x250'
-        },
+					"3 Plus 1 by Kim's Kitchen": null,
+					"BAM! Tapas Sake Bar": null,
+					"Buckaroo BBQ and Grill": null,
+					"California Pizza Kitchen": null,
+					"Caprilicious By Fraser Changi City/ Singapore": null,
+					"Charcoal Thai": null,
+					"Chen Fu Ji Classic": null,
+					"DIBS Restaurant and Bar": null,
+					"East Ocean Teochew Restaurant": null,
+					"Famous Kitchen": null,
+					"Fu Lin Men Chinese Restaurant": null,
+					"Gourmet Plus": null,
+					"Grand Mandarina Restaurant": null,
+					"Meat n’ Chill": null,
+					"Mouth Restaurant": null,
+					"O Batignolles Wine Bar & Bistrot": null,
+					"Old Hong Kong Kitchen": null,
+					"Orchid Thai": null,
+					"Pantler": null,
+					"Tien Court at Copthorne King’s Hotel Singapore": null
+        }
       };
       document.addEventListener('DOMContentLoaded', function() {
         var elems = document.querySelectorAll('.autocomplete');
