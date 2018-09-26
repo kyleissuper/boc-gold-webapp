@@ -100,12 +100,20 @@
     </style>
   </head>
   <body>
+  	<div class="modal bottom-sheet">
+  	  <div class="modal-content">
+  	    <h4>Get 10% more off by downloading the BOC Mobile Banking app</h4>
+  	  </div>
+  	  <div class="modal-footer">
+  	    <a href="https://play.google.com/store/apps/details?id=com.boc.bocsoft.bocmbovsa.buss&hl=en" class="modal-close waves-effect waves-green btn-flat">Install</a>
+  	  </div>
+  	</div>
     <div class="top">
       <a href="https://bschool.nus.edu.sg/news-hub/press-release/news/3511">BOC-NUS Hackathon 2018</a> | <a href="https://kyletan.me">Kyle Tan</a>
     </div>
     <header>
       <a href="/">
-        <img src="{{ url_for('static', filename='images/logo.png') }}" height=40 />
+        <img src="{{ url_for('static', filename='images/boc_gold_logo.png') }}" height=45 style="margin-top:4px" />
       </a>
     </header>
     {% if data["type"] is none %}
@@ -162,7 +170,7 @@
           <div class="description">
             {{ result["description"] }}
           </div>
-          <a href="tel:{{ result['phone'] }}" class="waves-effect waves-light btn phone"><i class="material-icons right">local_phone</i>Reserve</a>
+          <a href="tel:{{ result['phone'] }}" class="waves-effect modal-trigger waves-light btn phone"><i class="material-icons right">local_phone</i>Reserve</a>
         </section>
       {% endfor %}
     {% endif %}
@@ -182,66 +190,85 @@
     </div>
     <script type="text/javascript">
       let submit_url;
-      document.querySelector("#search_names").addEventListener("keyup", function(event) {
-        event.preventDefault();
-        if (event.keyCode === 13) {
-          submit_url = "/?search=" + this.value;
-          window.location.replace(submit_url);
-        }
-      });
-      document.querySelector("#search_icon").addEventListener("click", function(event) {
-        submit_url = "/?search=" + document.querySelector("#search_names").value;
-        window.location.replace(submit_url);
-      });
-      function showPosition(position) {
-        submit_url = "/?lat=" + position.coords.latitude;
-        submit_url = submit_url + "&lng=" + position.coords.longitude;
-        window.location.replace(submit_url);
-      }
-      function getLocation() {
-          if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(showPosition);
-          } else { 
-              x.innerHTML = "Geolocation is not supported by this browser.";
+      let search_names = document.querySelector("#search_names");
+      if (!!search_names) {
+        document.querySelector("#search_names").addEventListener("keyup", function(event) {
+          event.preventDefault();
+          if (event.keyCode === 13) {
+            submit_url = "/?search=" + this.value;
+            window.location.replace(submit_url);
           }
-      }
-      document.querySelector("#search_nearby").addEventListener("click", function() {
-        getLocation();
-      });
-		  let options = {
-        minLength: 0,
-				limit: 5,
-        onAutocomplete: function() {
+        });
+        document.querySelector("#search_icon").addEventListener("click", function(event) {
           submit_url = "/?search=" + document.querySelector("#search_names").value;
           window.location.replace(submit_url);
-        },
-        data: {
-					"3 Plus 1 by Kim's Kitchen": null,
-					"BAM! Tapas Sake Bar": null,
-					"Buckaroo BBQ and Grill": null,
-					"California Pizza Kitchen": null,
-					"Caprilicious By Fraser Changi City/ Singapore": null,
-					"Charcoal Thai": null,
-					"Chen Fu Ji Classic": null,
-					"DIBS Restaurant and Bar": null,
-					"East Ocean Teochew Restaurant": null,
-					"Famous Kitchen": null,
-					"Fu Lin Men Chinese Restaurant": null,
-					"Gourmet Plus": null,
-					"Grand Mandarina Restaurant": null,
-					"Meat n’ Chill": null,
-					"Mouth Restaurant": null,
-					"O Batignolles Wine Bar & Bistrot": null,
-					"Old Hong Kong Kitchen": null,
-					"Orchid Thai": null,
-					"Pantler": null,
-					"Tien Court at Copthorne King’s Hotel Singapore": null
+        });
+        function showPosition(position) {
+          submit_url = "/?lat=" + position.coords.latitude;
+          submit_url = submit_url + "&lng=" + position.coords.longitude;
+          window.location.replace(submit_url);
         }
-      };
-      document.addEventListener('DOMContentLoaded', function() {
-        var elems = document.querySelectorAll('.autocomplete');
-        var instances = M.Autocomplete.init(elems, options);
-      });
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else { 
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+        document.querySelector("#search_nearby").addEventListener("click", function() {
+          getLocation();
+        });
+		    let options = {
+          minLength: 0,
+			  	limit: 5,
+          onAutocomplete: function() {
+            submit_url = "/?search=" + document.querySelector("#search_names").value;
+            window.location.replace(submit_url);
+          },
+          data: {
+			  		"3 Plus 1 by Kim's Kitchen": null,
+			  		"BAM! Tapas Sake Bar": null,
+			  		"Buckaroo BBQ and Grill": null,
+			  		"California Pizza Kitchen": null,
+			  		"Caprilicious By Fraser Changi City/ Singapore": null,
+			  		"Charcoal Thai": null,
+			  		"Chen Fu Ji Classic": null,
+			  		"DIBS Restaurant and Bar": null,
+			  		"East Ocean Teochew Restaurant": null,
+			  		"Famous Kitchen": null,
+			  		"Fu Lin Men Chinese Restaurant": null,
+			  		"Gourmet Plus": null,
+			  		"Grand Mandarina Restaurant": null,
+			  		"Meat n’ Chill": null,
+			  		"Mouth Restaurant": null,
+			  		"O Batignolles Wine Bar & Bistrot": null,
+			  		"Old Hong Kong Kitchen": null,
+			  		"Orchid Thai": null,
+			  		"Pantler": null,
+			  		"Tien Court at Copthorne King’s Hotel Singapore": null
+          }
+        };
+        document.addEventListener('DOMContentLoaded', function() {
+          var elems = document.querySelectorAll('.autocomplete');
+          var instances = M.Autocomplete.init(elems, options);
+        });
+      }
+      let phone_links = document.querySelectorAll("a.phone");
+      if (!!phone_links) {
+	let elems;
+	let instances;
+  document.addEventListener('DOMContentLoaded', function() {
+    elems = document.querySelectorAll('.modal');
+    instances = M.Modal.init(elems, {});
+  });
+        phone_links.forEach(function(a) {
+          a.addEventListener("click", function(evt) {
+						window.setTimeout(function() {
+							M.Modal.getInstance(elems[0]).open();
+						}, 3000);
+          });
+        });
+      }
     </script>
   </body>
 </html>
