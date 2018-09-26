@@ -75,20 +75,22 @@
         <img src="{{ url_for('static', filename='images/logo.png') }}" height=40 />
       </a>
     </header>
-    <section>
-      <p class="input-field">
-          <input type="text" id="search_url" class="autocomplete" autofocus>
-          <label for="search_url">Find deals by pasting website URL</label>
-          <i class="material-icons right" id="search_icon">search</i>
-      </p>
-			<p><strong>OR</strong></p>
-      <p id="search_nearby">
-        <button class="btn waves-effect waves-light">
-          Find deals with my location
-          <i class="material-icons right">location_on</i>
-        </button>
-      </p>
-    </section>
+    {% if data["type"] is none %}
+      <section>
+        <p class="input-field">
+            <input type="text" id="search_url" class="autocomplete" autofocus>
+            <label for="search_url">Find deals by pasting website URL</label>
+            <i class="material-icons right" id="search_icon">search</i>
+        </p>
+		  	<p><strong>OR</strong></p>
+        <p id="search_nearby">
+          <button class="btn waves-effect waves-light">
+            Find deals with my location
+            <i class="material-icons right">location_on</i>
+          </button>
+        </p>
+      </section>
+      {% endif %}
     <section>
       <h5>What is BOC Gold?</h5>
       <p>BOC Gold is a prototype solution that shows you Bank of China exclusive deals. Simply paste the URL of the website you are on, or find deals using your location.</p>
@@ -132,6 +134,10 @@
       });
 		  let options = {
         minLength: 0,
+        onAutocomplete: function() {
+          submit_url = "/?url=" + document.querySelector("#search_url").value;
+          window.location.replace(submit_url);
+        },
         data: {
           "Apple": null,
           "Microsoft": null,
