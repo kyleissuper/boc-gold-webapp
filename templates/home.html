@@ -50,7 +50,7 @@
       .bottom {
         border-top: 2px solid #d3d3d3;
         margin-top: 20px;
-        padding: 10px 20px;
+        padding: 10px 20px 30px 20px;
         line-height: 30px;
       }
       header, section {
@@ -69,19 +69,33 @@
         margin-top: 15px;
       }
       section.result {
-        min-height: 200px;
+        min-height: 180px;
+        padding-top: 25px;
+        padding-bottom: 30px;
       }
       .thumb {
-        width: 150px;
-        height: 150px;
+        width: 125px;
+        height: 125px;
         background-position: center;
         background-size: cover;
         border-radius: 5px;
         float: right;
+        margin-left: 10px;
       }
       .name {
         font-weight: 700;
-        font-size: 14px;
+        font-size: 20px;
+        color: #000;
+        line-height: 22px;
+        margin-bottom: 5px;
+      }
+      .address {
+        font-style: italic;
+      }
+      .description {
+        margin: 5px 0 10px 0;
+        color: #000;
+        font-weight: 700;
       }
     </style>
   </head>
@@ -136,23 +150,19 @@
           <img class="thumb" style="background-image: url('{{ result['image'] }}')" />
           {% if result["url"] != "-" %}
             <a href="{{ result['url'] }}" target="_blank" rel="noopener noreferrer">
-              <span class="name">{{ result["name"]|trim() }}</span></a>
+              <div class="name">{{ result["name"]|trim() }}</div></a>
           {% else %}
-            <span class="name">
-              {{ result["name"]|trim() }}</span>
+            <div class="name">
+              {{ result["name"]|trim() }}
+            </div>
           {% endif %}
-          <span class="address">
+          <div class="address">
             {{ result["address"] }}
-          </span>
-          <span class="phone">
-            {{ result["phone"] }}
-          </span>
-          <span class="discount">
-            {{ result["discount"] }}
-          </span>
-          <span class="description">
+          </div>
+          <div class="description">
             {{ result["description"] }}
-          </span>
+          </div>
+          <a href="tel:{{ result['phone'] }}" class="waves-effect waves-light btn phone"><i class="material-icons right">local_phone</i>Reserve</a>
         </section>
       {% endfor %}
     {% endif %}
