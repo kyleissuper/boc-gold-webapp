@@ -5,21 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="{{ url_for('static', filename='favicon.ico') }}" rel="icon" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/css?family=Oxygen:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <style>
-      body, .top, .bottom, header, section {
+      body, .top, .bottom, header, section, .group, .group * {
         box-sizing: border-box;
       }
-      @media (min-width: 474px) {
+      @media (min-width: 550px) {
         body {
           position: absolute;
-          width: 458px;
+          width: 534px;
           left: 50%;
-          margin-left: -229px;
+          margin-left: -267px;
         }
       }
       body {
+        padding: 0 10px;
         font-family: 'Roboto', sans-serif;
         background: #f2f2f2;
+      }
+      strong {
+        font-weight: 700;
       }
       body, a {
         color: #535353;
@@ -31,8 +38,7 @@
       .top {
         font-size: 12px;
         text-align: right;
-        padding-bottom: 10px;
-        padding: 4px 0 10px 0;
+        padding: 10px 0 10px 0;
       }
       .bottom {
         border-top: 2px solid #d3d3d3;
@@ -48,6 +54,7 @@
         padding: 1.5em;
         margin-bottom: 15px;
       }
+      
     </style>
   </head>
   <body>
@@ -55,18 +62,55 @@
       BOC-NUS Hackathon 2018 | <a href="https://kyletan.me">Kyle Tan</a>
     </div>
     <header>
-      <img src="{{ url_for('static', filename='images/logo.png') }}" height=40 />
+      <a href="/">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" height=40 />
+      </a>
     </header>
     <section>
-      <p>Hello world</p>
+      <p class="input-field">
+          <input type="text" id="search_url" autofocus>
+          <label for="search_url">Find deals by pasting website URL</label>
+      </p>
+			<p><strong>OR</strong></p>
+      <p id="search_nearby">
+        <button class="btn waves-effect waves-light">
+          Find deals with my location
+          <i class="material-icons right">location_on</i>
+        </button>
+      </p>
     </section>
     <div class="bottom">
       &copy;
       <script type="text/javascript">
-        var d = new Date()
+        let d = new Date()
         document.write(d.getFullYear())
-      </script> 
+      </script> BOC (Singapore) and NUS.
       <img src="{{ url_for('static', filename='images/logo.png') }}" height="30px" style="float: right" />
     </div>
+    <script type="text/javascript">
+      let submit_url;
+      document.querySelector("#search_url").addEventListener("keyup", function(event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+          submit_url = "/?url=" + this.value;
+          window.location.replace(submit_url);
+        }
+      });
+      function showPosition(position) {
+        submit_url = "/?latitude=" + position.coords.latitude;
+        submit_url = submit_url + "&longitude=" + position.coords.longitude;
+        window.location.replace(submit_url);
+      }
+      function getLocation() {
+          if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(showPosition);
+          } else { 
+              x.innerHTML = "Geolocation is not supported by this browser.";
+          }
+      }
+      document.querySelector("#search_nearby").addEventListener("click", function() {
+        getLocation();
+      });
+    </script>
   </body>
 </html>
