@@ -4,9 +4,69 @@
     <title>Bank of China | Gold</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="{{ url_for('static', filename='favicon.ico') }}" rel="icon" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:400,700" rel="stylesheet">
     <style>
+      body, .top, .bottom, header, section {
+        box-sizing: border-box;
+      }
+      @media (min-width: 474px) {
+        body {
+          position: absolute;
+          width: 458px;
+          left: 50%;
+          margin-left: -229px;
+        }
+      }
+      body {
+        font-family: 'Roboto', sans-serif;
+        background: #f2f2f2;
+      }
+      body, a {
+        color: #535353;
+        font-size: 13px;
+      }
+      .top a {
+        font-size: 12px;
+      }
+      .top {
+        font-size: 12px;
+        text-align: right;
+        padding-bottom: 10px;
+        padding: 4px 0 10px 0;
+      }
+      .bottom {
+        border-top: 2px solid #d3d3d3;
+        margin-top: 20px;
+        padding: 10px 20px;
+        line-height: 30px;
+      }
+      header, section {
+        border: 1px solid #dadada;
+        border-radius: 5px;
+        background: #fff;
+        box-shadow: 0 2px 26px #eeeeee;
+        padding: 1.5em;
+        margin-bottom: 15px;
+      }
     </style>
   </head>
   <body>
+    <div class="top">
+      BOC-NUS Hackathon 2018 | <a href="https://kyletan.me">Kyle Tan</a>
+    </div>
+    <header>
+      <img src="{{ url_for('static', filename='images/logo.png') }}" height=40 />
+    </header>
+    <section>
+      <p>Hello world</p>
+    </section>
+    <div class="bottom">
+      &copy;
+      <script type="text/javascript">
+        var d = new Date()
+        document.write(d.getFullYear())
+      </script> 
+      <img src="{{ url_for('static', filename='images/logo.png') }}" height="30px" style="float: right" />
+    </div>
   </body>
 </html>
