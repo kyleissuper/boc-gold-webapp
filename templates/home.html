@@ -32,6 +32,9 @@
         color: #535353;
         font-size: 13px;
       }
+      a {
+        text-decoration: underline;
+      }
       .top a {
         font-size: 12px;
       }
@@ -54,12 +57,18 @@
         padding: 1.5em;
         margin-bottom: 15px;
       }
-      
+      #search_url {
+        width: Calc(100% - 40px);
+      }
+      #search_icon {
+        cursor: pointer;
+        margin-top: 15px;
+      }
     </style>
   </head>
   <body>
     <div class="top">
-      BOC-NUS Hackathon 2018 | <a href="https://kyletan.me">Kyle Tan</a>
+      <a href="https://bschool.nus.edu.sg/news-hub/press-release/news/3511">BOC-NUS Hackathon 2018</a> | <a href="https://kyletan.me">Kyle Tan</a>
     </div>
     <header>
       <a href="/">
@@ -68,8 +77,9 @@
     </header>
     <section>
       <p class="input-field">
-          <input type="text" id="search_url" autofocus>
+          <input type="text" id="search_url" class="autocomplete" autofocus>
           <label for="search_url">Find deals by pasting website URL</label>
+          <i class="material-icons right" id="search_icon">search</i>
       </p>
 			<p><strong>OR</strong></p>
       <p id="search_nearby">
@@ -79,12 +89,17 @@
         </button>
       </p>
     </section>
+    <section>
+      <h5>What is BOC Gold?</h5>
+      <p>BOC Gold is a prototype solution that shows you Bank of China exclusive deals. Simply paste the URL of the website you are on, or find deals using your location.</p>
+      <p>This solution was built for a <a href="https://bschool.nus.edu.sg/news-hub/press-release/news/3511">24 Hour Hackathon</a> hosted by the National University of Singapore Business School and sponsored by Bank of China (Singapore).</p>
+    </section>
     <div class="bottom">
       &copy;
       <script type="text/javascript">
         let d = new Date()
         document.write(d.getFullYear())
-      </script> BOC (Singapore) and NUS.
+      </script> <a href="http://www.bankofchina.com/sg">BOC (Singapore)</a> and <a href="http://nus.edu.sg/">NUS</a>.
       <img src="{{ url_for('static', filename='images/logo.png') }}" height="30px" style="float: right" />
     </div>
     <script type="text/javascript">
@@ -95,6 +110,10 @@
           submit_url = "/?url=" + this.value;
           window.location.replace(submit_url);
         }
+      });
+      document.querySelector("#search_icon").addEventListener("click", function(event) {
+        submit_url = "/?url=" + document.querySelector("#search_url").value;
+        window.location.replace(submit_url);
       });
       function showPosition(position) {
         submit_url = "/?latitude=" + position.coords.latitude;
@@ -110,6 +129,18 @@
       }
       document.querySelector("#search_nearby").addEventListener("click", function() {
         getLocation();
+      });
+		  let options = {
+        minLength: 0,
+        data: {
+          "Apple": null,
+          "Microsoft": null,
+          "Google": 'https://placehold.it/250x250'
+        },
+      };
+      document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.autocomplete');
+        var instances = M.Autocomplete.init(elems, options);
       });
     </script>
   </body>
