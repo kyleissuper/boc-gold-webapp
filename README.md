@@ -2,7 +2,7 @@
 
 Prototype web application (with [companion Chrome extension](https://github.com/kyleissuper/boc-gold-extension)) that identifies Bank of China (Singapore) exclusive deals. Search for deals by business name or location.
 
-Live demo available at [https://boc.gold/](https://boc.gold/).
+Live demo available at [https://bocgold.kyletan.me/](https://bocgold.kyletan.me/).
 
 ## Presentation deck
 
